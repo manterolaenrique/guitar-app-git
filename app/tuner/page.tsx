@@ -1,9 +1,9 @@
-import ScaleViewer from '@/components/ScaleViewer';
+import Tuner from '@/components/Tuner';
 
-export default function Home() {
+export default function TunerPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <ScaleViewer />
+      <Tuner />
     </main>
   );
-}
+} 
