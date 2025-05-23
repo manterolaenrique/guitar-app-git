@@ -7,6 +7,7 @@ import { Guitar } from 'lucide-react';
 const TituloAnimado = () => {
     return (
       <div className="titulo-container">
+        <div className="background-image"></div>
         <motion.h1
           className="titulo titulo-rock"
           initial={{ opacity: 0, y: 20 }}
