@@ -108,7 +108,6 @@ const ScaleViewer = () => {
         >
           <option value="all">Mostrar todas las notas</option>
           <option value="scale">Mostrar solo notas de la escala</option>
-          <option value="positions">Mostrar posiciones de la escala</option>
         </select>
       </div>
 

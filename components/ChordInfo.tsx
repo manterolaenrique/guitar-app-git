@@ -62,10 +62,10 @@ const ChordInfo = () => {
     : `Una tríada ${type.toLowerCase()} contiene los grados: ${finalLabels.join(', ')}.`;
 
   return (
-    <div className="chord-container scale-container">
-      <h2 className="chord-title scale-title">Visualizador de Acordes</h2>
+    <div className="chord-container scale-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <h2 className="chord-title scale-title" style={{ textAlign: 'center', width: '100%' }}>Visualizador de Acordes</h2>
 
-      <div className="chord-form scale-selector">
+      <div className="chord-form scale-selector" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', width: '100%' }}>
         <div>
           <label className="chord-label">Tonalidad</label>
           <select
@@ -105,7 +105,7 @@ const ChordInfo = () => {
         </div>
       </div>
 
-      <div className="chord-info-row">
+      <div className="chord-info-row" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', width: '100%' }}>
         <div className="chord-info-block">
           <h3 className="scale-info-title">Grados</h3>
           <div className="intervals-list">
@@ -128,8 +128,8 @@ const ChordInfo = () => {
         </div>
       </div>
 
-      <p className="chord-explanation">{explanation}</p>
-      <p className="chord-notes">
+      <p className="chord-explanation" style={{ textAlign: 'center', width: '100%' }}>{explanation}</p>
+      <p className="chord-notes" style={{ textAlign: 'center', width: '100%' }}>
         Notas en <span className="selected-tone-block">{tone}</span> <span className="selected-scale-type-block">{type}</span>: {chordNotes.join(', ')}
       </p>
 
