@@ -49,26 +49,6 @@ const getChordsByDegree = (scaleType: string, scaleNotes: string[]) => {
 const tones = chromaticScale;
 const scaleTypes = Object.keys(scalePatterns);
 
-const modeNames = [
-  'Jónico',
-  'Dórico',
-  'Frigio',
-  'Lidio',
-  'Mixolidio',
-  'Eólico',
-  'Locrio',
-];
-
-const modeColors: Record<string, string> = {
-  'Jónico': '#22c55e',      // verde
-  'Dórico': '#3b82f6',      // azul
-  'Frigio': '#f59e42',      // naranja
-  'Lidio': '#a855f7',       // violeta
-  'Mixolidio': '#eab308',   // amarillo
-  'Eólico': '#ef4444',      // rojo
-  'Locrio': '#6366f1',      // indigo
-};
-
 const ScaleViewer = () => {
   const [tone, setTone] = useState('C');
   const [scaleType, setScaleType] = useState('Pentatónica Mayor');
@@ -132,7 +112,7 @@ const ScaleViewer = () => {
         </select>
       </div>
 
-      <div className="w-full overflow-x-auto">
+      <div className="fretboard-container">
         <div className="fretboard">
           <div className="fret-numbers">
             {Array.from({ length: TOTAL_FRETS + 1 }, (_, i) => (

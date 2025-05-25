@@ -36,6 +36,68 @@ main {
     box-sizing: border-box;
 }
 
+@media (max-width: 768px) {
+    main {
+        padding: 1rem;
+        padding-top: 70px;
+    }
+
+    .tuner-container,
+    .scale-container,
+    .chord-container,
+    .about-container {
+        padding: 1.5rem;
+    }
+
+    .scale-selector {
+        grid-template-columns: 1fr;
+    }
+
+    .chord-form {
+        grid-template-columns: 1fr;
+    }
+
+    .fretboard-container {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        overflow-x: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+    }
+    .fretboard {
+        min-width: 875px !important; /* 35px * 25 trastes */
+        width: min-content !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .fret-numbers,
+    .string-row {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        padding: 0.8rem;
+        padding-top: 60px;
+    }
+
+    .tuner-container,
+    .scale-container,
+    .chord-container,
+    .about-container {
+        padding: 1rem;
+    }
+
+    .fretboard {
+        min-width: 875px !important;
+        width: min-content !important;
+    }
+}
+
 /* === NAVBAR === */
 .navbar {
     position: fixed;
@@ -300,16 +362,46 @@ body[data-theme='dark'] .scale-selector select {
     color: inherit;
 }
 
+.fretboard-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+    padding: 0.5rem;
+}
+
+.fretboard-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.fretboard-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.fretboard-container::-webkit-scrollbar-thumb {
+    background: rgba(139, 69, 19, 0.5);
+    border-radius: 4px;
+}
+
+.fretboard-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 69, 19, 0.7);
+}
+
 .fretboard {
     background-color: #8B4513;
     padding: 1rem;
     border-radius: 0.5rem;
-    width: 100%;
+    min-width: 900px;
+    margin: 0 auto;
 }
 
 .fret-numbers {
     display: grid;
-    grid-template-columns: repeat(25, minmax(40px, 1fr));
+    grid-template-columns: repeat(25, minmax(35px, 1fr));
     border-bottom: 1px solid #4b5563;
     margin-bottom: 0.5rem;
     color: #d1d5db;
@@ -325,7 +417,7 @@ body[data-theme='dark'] .scale-selector select {
 
 .string-row {
     display: grid;
-    grid-template-columns: repeat(25, minmax(40px, 1fr));
+    grid-template-columns: repeat(25, minmax(35px, 1fr));
     margin-bottom: 0.5rem;
 }
 
@@ -519,12 +611,40 @@ body[data-theme='dark'] .footer {
     text-decoration: underline;
 }
 
+@media (max-width: 768px) {
+    .footer {
+        padding: 1rem 0;
+    }
+
+    .footer-content {
+        padding: 0 1rem;
+    }
+
+    .footer-text {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 0.8rem 0;
+    }
+
+    .footer-content {
+        padding: 0 0.8rem;
+    }
+
+    .footer-text {
+        font-size: 0.75rem;
+    }
+}
+
 /* === TITULO ANIMADO === */
 .titulo-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2rem auto;
+    margin: 2rem auto 0.3rem auto;
     text-align: center;
     padding: 2rem;
     position: relative;
@@ -1160,3 +1280,115 @@ body[data-theme='dark'] .horizontal-item {
     background-attachment: fixed;
     z-index: -1;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 16px;
+    }
+
+    .nav-left {
+        margin-left: 0;
+        gap: 10px;
+    }
+
+    .nav-btn {
+        padding: 8px 12px;
+        font-size: 16px;
+    }
+
+    .nav-btn span {
+        display: none;
+    }
+
+    .nav-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .nav-right {
+        margin-right: 0;
+    }
+
+    .theme-toggle {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .titulo {
+        font-size: 2rem;
+        padding: 0.8rem 1.5rem;
+        gap: 0.8rem;
+    }
+
+    .guitar-icon {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .fretboard-container {
+        padding: 0.3rem;
+    }
+
+    .fretboard {
+        padding: 0.8rem;
+    }
+
+    .fret {
+        height: 2.5rem;
+    }
+
+    .note-marker {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 12px;
+    }
+
+    .nav-btn {
+        padding: 6px 10px;
+    }
+
+    .nav-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .titulo {
+        font-size: 1.5rem;
+        padding: 0.6rem 1.2rem;
+        gap: 0.6rem;
+    }
+
+    .guitar-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .fretboard-container {
+        padding: 0.2rem;
+    }
+
+    .fretboard {
+        padding: 0.6rem;
+    }
+
+    .fret {
+        height: 2rem;
+    }
+
+    .note-marker {
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: 0.8rem;
+    }
+
+    .fret-numbers {
+        font-size: 0.75rem;
+    }
+}
+
