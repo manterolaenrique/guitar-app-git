@@ -1716,3 +1716,78 @@ svg .circle-armature-group {
 
 /* Si es necesario, puedes aumentar el radio de las armaduras para que queden fuera del círculo verde */
 
+/* Estilos para la planilla del círculo de quintas */
+.circle-sheet-container {
+  width: 100%;
+  max-width: 850px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: rgba(31, 41, 55, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme='light'] .circle-sheet-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #111;
+}
+
+.sheet-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.sheet-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.8fr 0.8fr 2fr;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(178, 223, 219, 0.2);
+  border-radius: 8px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.sheet-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.8fr 0.8fr 2fr;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(178, 223, 219, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.sheet-row:hover {
+  background-color: rgba(178, 223, 219, 0.1);
+}
+
+.major-key {
+  font-weight: 600;
+  color: #b2dfdb;
+}
+
+.minor-key {
+  color: #d1d5db;
+}
+
+.sharps, .flats {
+  text-align: center;
+  font-weight: 500;
+}
+
+.altered-notes {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.circle-page-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+

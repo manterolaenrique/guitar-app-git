@@ -7,7 +7,7 @@ const SEGMENTS = circleOfFifthsNotes.length;
 
 const CircleOfFifths = () => {
   const [selected, setSelected] = useState<number | null>(null);
-  const [notation, setNotation] = useState<'es' | 'en'>('es');
+  const [notation, setNotation] = useState<'es' | 'en'>('en');
 
   // Función para obtener el texto según notación
   const getNoteLabel = (note: CircleNote, type: 'major' | 'minor' | 'enharmonicMajor' | 'enharmonicMinor') => {

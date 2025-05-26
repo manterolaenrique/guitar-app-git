@@ -1,5 +1,11 @@
 import CircleOfFifths from '../../components/CircleOfFifths';
+import CircleOfFifthsSheet from '../../components/CircleOfFifthsSheet';
 
 export default function CircleOfFifthsPage() {
-  return <CircleOfFifths />;
+  return (
+    <div className="circle-page-container">
+      <CircleOfFifths />
+      <CircleOfFifthsSheet />
+    </div>
+  );
 } 
