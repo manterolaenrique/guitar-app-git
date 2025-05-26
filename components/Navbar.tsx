@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Guitar, Music2, Info } from 'lucide-react';
+import { Home, Guitar, Music2, Info, Circle } from 'lucide-react';
 
 const Navbar = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -26,6 +26,10 @@ const Navbar = () => {
         <Link href="/tuner" className={`nav-btn ${pathname === '/tuner' ? 'active' : ''}`}>
           <Guitar className="nav-icon" />
           <span>Afinador</span>
+        </Link>
+        <Link href="/circle-of-fifths" className={`nav-btn ${pathname === '/circle-of-fifths' ? 'active' : ''}`}>
+          <Circle className="nav-icon" />
+          <span>Círculo de Quintas</span>
         </Link>
         <Link href="/chords" className={`nav-btn ${pathname === '/chords' ? 'active' : ''}`}>
           <Music2 className="nav-icon" />
