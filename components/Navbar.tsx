@@ -2,11 +2,13 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Guitar, Music2, Info, Circle } from 'lucide-react';
+import { Home, Guitar, Music2, Info, Circle, Music, Sun, Moon } from 'lucide-react';
+import { useMusicNotation } from '../contexts/MusicNotationContext';
 
 const Navbar = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const pathname = usePathname();
+  const { notation, toggleNotation } = useMusicNotation();
 
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
@@ -41,8 +43,13 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="nav-right">
+        <button className="theme-toggle" onClick={toggleNotation}>
+          <Music className="nav-icon" />
+          <span>{notation === 'spanish' ? 'Español' : 'Americano'}</span>
+        </button>
         <button className="theme-toggle" onClick={toggleTheme}>
-          {theme === 'light' ? '🌙 Modo Oscuro' : '☀️ Modo Claro'}
+          {theme === 'light' ? <Moon className="nav-icon" /> : <Sun className="nav-icon" />}
+          <span>{theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}</span>
         </button>
       </div>
     </nav>

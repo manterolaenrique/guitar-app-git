@@ -1,17 +1,18 @@
 'use client';
 import { useState } from 'react';
 import { circleOfFifthsNotes, CircleNote } from '../data/circleOfFifthsNotes';
+import { useMusicNotation } from '../contexts/MusicNotationContext';
 
 const CIRCLE_DEGREES = 360;
 const SEGMENTS = circleOfFifthsNotes.length;
 
 const CircleOfFifths = () => {
   const [selected, setSelected] = useState<number | null>(null);
-  const [notation, setNotation] = useState<'es' | 'en'>('en');
+  const { notation } = useMusicNotation();
 
   // Función para obtener el texto según notación
   const getNoteLabel = (note: CircleNote, type: 'major' | 'minor' | 'enharmonicMajor' | 'enharmonicMinor') => {
-    if (notation === 'es') {
+    if (notation === 'spanish') {
       return note[type] || '';
     } else {
       if (type === 'major') return note.major_en;
@@ -41,16 +42,6 @@ const CircleOfFifths = () => {
           <li>Las tonalidades con bemoles (♭) se muestran en la mitad izquierda</li>
           <li>Do (C) se sitúa en la parte superior, sin alteraciones</li>
         </ul>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16, alignItems: 'center', gap: 12 }}>
-        <label className="notation-toggle-checkbox">
-          <input
-            type="checkbox"
-            checked={notation === 'en'}
-            onChange={() => setNotation(notation === 'es' ? 'en' : 'es')}
-          />
-          Mostrar notas en cifrado americano
-        </label>
       </div>
       <div className="circle-of-fifths-responsive">
         <svg className="circle-svg" viewBox="0 0 900 900" width="100%" height="100%">
@@ -83,7 +74,6 @@ const CircleOfFifths = () => {
                 {getNoteLabel(note, 'enharmonicMajor') && (
                   <text x={x} y={y + 38} textAnchor="middle" alignmentBaseline="middle" className="circle-label-enharmonic">{getNoteLabel(note, 'enharmonicMajor')}</text>
                 )}
-             
               </g>
             );
           })}
@@ -127,7 +117,7 @@ const CircleOfFifths = () => {
               <p style={{ fontSize: '1.3rem', fontWeight: 600 }}>{circleOfFifthsNotes[selected].sharps || 0}</p>
               {circleOfFifthsNotes[selected].sharps ? (
                 <span className="note-info-armature-list">
-                  {notation === 'es'
+                  {notation === 'spanish'
                     ? ['Fa#', 'Do#', 'Sol#', 'Re#', 'La#', 'Mi#', 'Si#'].slice(0, circleOfFifthsNotes[selected].sharps).join(', ')
                     : ['F#', 'C#', 'G#', 'D#', 'A#', 'E#', 'B#'].slice(0, circleOfFifthsNotes[selected].sharps).join(', ')
                   }
@@ -139,7 +129,7 @@ const CircleOfFifths = () => {
               <p style={{ fontSize: '1.3rem', fontWeight: 600 }}>{circleOfFifthsNotes[selected].flats || 0}</p>
               {circleOfFifthsNotes[selected].flats ? (
                 <span className="note-info-armature-list">
-                  {notation === 'es'
+                  {notation === 'spanish'
                     ? ['Sib', 'Mib', 'Lab', 'Reb', 'Solb', 'Dob', 'Fab'].slice(0, circleOfFifthsNotes[selected].flats).join(', ')
                     : ['Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb', 'Fb'].slice(0, circleOfFifthsNotes[selected].flats).join(', ')
                   }

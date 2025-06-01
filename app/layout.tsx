@@ -3,6 +3,7 @@ import { Inter, Roboto_Mono } from "next/font/google";
 import Navbar from '../components/Navbar';
 import Footer from "../components/Footer";
 import TituloAnimado from "../components/TituloAnimado";
+import { MusicNotationProvider } from "../contexts/MusicNotationContext";
 import "./globals.css";
 import "../styles/globals.css";
 
@@ -32,10 +33,12 @@ export default function RootLayout({
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
         data-theme="dark"
       >
-        <Navbar />
-        <TituloAnimado />
-        <main>{children}</main>
-        <Footer />
+        <MusicNotationProvider>
+          <Navbar />
+          <TituloAnimado />
+          <main>{children}</main>
+          <Footer />
+        </MusicNotationProvider>
       </body>
     </html>
   );

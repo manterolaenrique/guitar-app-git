@@ -1,25 +1,39 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { chromaticScale, scalePatterns, instrumentStrings, InstrumentType, TOTAL_FRETS } from '@/data/scaleData';
 import { scaleFormulas } from '@/data/scaleFormulas';
+import { useMusicNotation } from '../contexts/MusicNotationContext';
+import { convertNote } from '../utils/noteConverter';
 
 type DisplayMode = 'all' | 'scale' | 'positions';
 
-const getScaleNotes = (root: string, pattern: number[]) => {
+interface FretNote {
+  note: string;
+  isScaleNote: boolean;
+}
+
+const getScaleNotes = (root: string, pattern: number[], notation: 'american' | 'spanish'): string[] => {
   const rootIndex = chromaticScale.indexOf(root);
-  return pattern.map(step => chromaticScale[(rootIndex + step) % 12]);
+  return pattern.map(step => {
+    const note = chromaticScale[(rootIndex + step) % 12];
+    return convertNote(note, notation);
+  });
 };
 
-const getFretboard = (scaleNotes: string[], instrumentType: InstrumentType, displayMode: DisplayMode) => {
+const getFretboard = (scaleNotes: string[], instrumentType: InstrumentType, displayMode: DisplayMode, notation: 'american' | 'spanish', fretCount: number): (FretNote | string)[][] => {
   const strings = instrumentStrings[instrumentType];
   return strings.map(openNote => {
     const startIndex = chromaticScale.indexOf(openNote);
-    return Array.from({ length: TOTAL_FRETS + 1 }, (_, fret) => {
+    return Array.from({ length: fretCount + 1 }, (_, fret) => {
       const note = chromaticScale[(startIndex + fret) % 12];
+      const convertedNote = convertNote(note, notation);
       if (displayMode === 'all') {
-        return note;
+        return {
+          note: convertedNote,
+          isScaleNote: scaleNotes.includes(convertedNote)
+        };
       } else {
-        return scaleNotes.includes(note) ? note : '';
+        return scaleNotes.includes(convertedNote) ? note : '';
       }
     });
   });
@@ -50,29 +64,68 @@ const tones = chromaticScale;
 const scaleTypes = Object.keys(scalePatterns);
 
 const ScaleViewer = () => {
-  const [tone, setTone] = useState('C');
+  const { notation } = useMusicNotation();
+  const [tone, setTone] = useState(notation === 'spanish' ? 'Do' : 'C');
   const [scaleType, setScaleType] = useState('Pentatónica Mayor');
   const [instrumentType, setInstrumentType] = useState<InstrumentType>('guitar');
   const [displayMode, setDisplayMode] = useState<DisplayMode>('scale');
   
   const pattern = scalePatterns[scaleType];
-  const scaleNotes = getScaleNotes(tone, pattern);
-  const fretboard = getFretboard(scaleNotes, instrumentType, displayMode);
+  const scaleNotes = getScaleNotes(tone, pattern, notation);
+  const fretCount = TOTAL_FRETS;
+  const fretboard = getFretboard(scaleNotes, instrumentType, displayMode, notation, fretCount);
   const scaleInfo = scaleFormulas[scaleType];
+
+  const handleNotationChange = (newTone: string) => {
+    setTone(newTone);
+  };
+
+  const getNoteClass = (note: FretNote | string): string => {
+    if (displayMode === 'all') {
+      if (typeof note === 'string') return '';
+      if (!note.note) return '';
+      if (note.isScaleNote) {
+        const tonicInCurrentNotation = convertNote(chromaticScale[chromaticScale.indexOf(tone)], notation);
+        return note.note === tonicInCurrentNotation ? 'note-marker root' : 'note-marker scale';
+      }
+      return 'note-marker non-scale';
+    } else {
+      if (typeof note === 'string') {
+        if (!note) return '';
+        const tonicBaseNote = chromaticScale[chromaticScale.indexOf(tone)];
+        return note === tonicBaseNote ? 'note-marker root' : 'note-marker scale';
+      }
+      return '';
+    }
+  };
+
+  const getNoteDisplay = (note: FretNote | string): string => {
+    if (displayMode === 'all') {
+      if (typeof note === 'string') return '';
+      return note.note;
+    } else {
+      if (typeof note === 'string') {
+        return note ? convertNote(note, notation) : '';
+      }
+      return '';
+    }
+  };
 
   return (
     <div className="scale-container">
       <h2 className="scale-title">Escalas</h2>
 
-      <div className="scale-selector">
+      <div className="grid md:grid-cols-2 gap-4 mb-4 scale-selector">
         <div>
           <label>Tono:</label>
           <select 
             value={tone} 
-            onChange={(e) => setTone(e.target.value)}
+            onChange={(e) => handleNotationChange(e.target.value)}
           >
-            {tones.map((t) => (
-              <option key={t} value={t}>{t}</option>
+            {chromaticScale.map((t) => (
+              <option key={t} value={t}>
+                {convertNote(t, notation)}
+              </option>
             ))}
           </select>
         </div>
@@ -82,7 +135,7 @@ const ScaleViewer = () => {
             value={scaleType} 
             onChange={(e) => setScaleType(e.target.value)}
           >
-            {scaleTypes.map((type) => (
+            {Object.keys(scalePatterns).map((type) => (
               <option key={type} value={type}>{type}</option>
             ))}
           </select>
@@ -97,45 +150,34 @@ const ScaleViewer = () => {
             <option value="bass">Bajo (4 cuerdas)</option>
           </select>
         </div>
-      </div>
-
-      <div className="scale-options">
-        <label>Modo de visualización:</label>
-        <select 
-          value={displayMode} 
-          onChange={(e) => setDisplayMode(e.target.value as DisplayMode)}
-          className="display-mode-select"
-        >
-          <option value="all">Mostrar todas las notas</option>
-          <option value="scale">Mostrar solo notas de la escala</option>
-        </select>
+        <div>
+          <label>Modo de visualización:</label>
+          <select 
+            value={displayMode} 
+            onChange={(e) => setDisplayMode(e.target.value as DisplayMode)}
+          >
+            <option value="all">Mostrar todas las notas</option>
+            <option value="scale">Mostrar solo notas de la escala</option>
+          </select>
+        </div>
       </div>
 
       <div className="fretboard-container">
         <div className="fretboard">
           <div className="fret-numbers">
             {Array.from({ length: TOTAL_FRETS + 1 }, (_, i) => (
-              <div key={i}>{i}</div>
+              <div key={i} className="fret-number">{i}</div>
             ))}
           </div>
           <div className="strings-container">
             {fretboard.map((string, stringIdx) => (
               <div key={stringIdx} className="string-row">
                 {string.map((note, fretIdx) => (
-                  <div key={fretIdx} className="fret">
-                    {note && (
-                      <div 
-                        className={`note-marker ${
-                          scaleNotes.includes(note) 
-                            ? note === tone 
-                              ? 'root' 
-                              : 'scale'
-                            : 'non-scale'
-                        }`}
-                      >
-                        {note}
-                      </div>
-                    )}
+                  <div
+                    key={fretIdx}
+                    className={`fret ${getNoteClass(note)}`}
+                  >
+                    {getNoteDisplay(note)}
                   </div>
                 ))}
               </div>
@@ -159,7 +201,7 @@ const ScaleViewer = () => {
         </div>
         <div className="scale-info-block">
           <h3 className="scale-info-title">Tono seleccionado</h3>
-          <span className="selected-tone-block">{tone}</span>
+          <span className="selected-tone-block">{convertNote(tone, notation)}</span>
         </div>
         <div className="scale-info-block">
           <h3 className="scale-info-title">Tipo de escala seleccionada</h3>
