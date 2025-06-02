@@ -47,13 +47,13 @@ Sigue estos sencillos pasos para tener la aplicación funcionando localmente:
 1.  **Clona el repositorio:**
 
     ```bash
-    git clone [URL del Repositorio]**(PENDIENTE)**
+    git clone (https://github.com/manterolaenrique/guitar-app-git.git)
     ```
 
 2.  **Navega al directorio del proyecto:**
 
     ```bash
-    cd [nombre-del-directorio]**(PENDIENTE)**
+    cd guitar-app-git
     ```
 
 3.  **Instala las dependencias:**
