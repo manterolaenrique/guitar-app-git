@@ -26,7 +26,7 @@ Aquí tienes algunas capturas de pantalla de la aplicación en acción:
 - **Visualizador de Escalas:** Explora diferentes escalas en un diapasón interactivo.
 - **Visualizador de Acordes:** Descubre diversas formas de acordes en el diapasón.
 - **Círculo de Quintas:** Entiende las relaciones entre tonalidades de forma visual.
-- **Afinador (Próximamente/si ya existe):** Herramienta para afinar tu guitarra.
+- **Afinador:** Herramienta para afinar tu guitarra.
 - **Modo Claro/Oscuro:** Personaliza la apariencia de la app.
 - **Cambio de Cifrado:** Alterna entre notación americana y española.
 
@@ -47,7 +47,7 @@ Sigue estos sencillos pasos para tener la aplicación funcionando localmente:
 1.  **Clona el repositorio:**
 
     ```bash
-    git clone (https://github.com/manterolaenrique/guitar-app-git.git)
+    git clone https://github.com/manterolaenrique/guitar-app-git.git
     ```
 
 2.  **Navega al directorio del proyecto:**
