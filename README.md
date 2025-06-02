@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎸 Herramientas de Guitarra 🤘
 
-## Getting Started
+¡Bienvenido a Herramientas de Guitarra! Una aplicación web interactiva diseñada para guitarristas de todos los niveles. Explora escalas, acordes y el círculo de quintas de una manera visual y sencilla.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Demo en Vivo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+¡Prueba la aplicación tú mismo!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[Demo](https://guitar-app-git.vercel.app/)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ✨ Vistazo Rápido
 
-To learn more about Next.js, take a look at the following resources:
+Aquí tienes algunas capturas de pantalla de la aplicación en acción:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![image](https://github.com/user-attachments/assets/0f95d483-3ffa-4877-9e48-2762080f6853)
+![image](https://github.com/user-attachments/assets/cd054b1c-7ce3-4ed0-92d8-8ee80ddf255f)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 💡 Características Principales
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Visualizador de Escalas:** Explora diferentes escalas en un diapasón interactivo.
+- **Visualizador de Acordes:** Descubre diversas formas de acordes en el diapasón.
+- **Círculo de Quintas:** Entiende las relaciones entre tonalidades de forma visual.
+- **Afinador:** Herramienta para afinar tu guitarra.
+- **Modo Claro/Oscuro:** Personaliza la apariencia de la app.
+- **Cambio de Cifrado:** Alterna entre notación americana y española.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+- React (con Next.js)
+- TypeScript
+- Tailwind CSS (si aplica)
+
+---
+
+## instalación y Uso
+
+Sigue estos sencillos pasos para tener la aplicación funcionando localmente:
+
+1.  **Clona el repositorio:**
+
+    ```bash
+    git clone https://github.com/manterolaenrique/guitar-app-git.git
+    ```
+
+2.  **Navega al directorio del proyecto:**
+
+    ```bash
+    cd guitar-app-git
+    ```
+
+3.  **Instala las dependencias:**
+
+    ```bash
+    npm install
+    # o si usas yarn
+    # yarn install
+    ```
+
+4.  **Ejecuta la aplicación en modo desarrollo:**
+
+    ```bash
+    npm run dev
+    # o si usas yarn
+    # yarn dev
+    ```
+
+La aplicación debería abrirse en tu navegador en `http://localhost:3000`.
