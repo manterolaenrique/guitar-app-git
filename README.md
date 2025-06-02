@@ -8,7 +8,7 @@
 
 ¡Prueba la aplicación tú mismo!
 
-[(https://guitar-app-git.vercel.app/)]
+[Demo](https://guitar-app-git.vercel.app/)
 
 ---
 
