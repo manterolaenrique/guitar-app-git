@@ -45,6 +45,7 @@ main {
     .tuner-container,
     .scale-container,
     .chord-container,
+    .circle-of-fifths-container,
     .about-container {
         padding: 1.5rem;
     }
@@ -120,6 +121,7 @@ main {
     .tuner-container,
     .scale-container,
     .chord-container,
+    .circle-of-fifths-container,
     .about-container {
         padding: 1rem;
     }
@@ -266,6 +268,7 @@ body[data-theme='light'] .nav-btn:hover {
 .tuner-container,
 .scale-container,
 .chord-container,
+.circle-of-fifths-container,
 .about-container {
     width: 100%;
     max-width: 1200px;
@@ -690,9 +693,9 @@ body[data-theme='dark'] .footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2rem auto 0.3rem auto;
+    margin: 2rem auto -7rem auto;
     text-align: center;
-    padding: 2rem;
+    padding: 1rem;
     position: relative;
     width: 100%;
     max-width: 1200px;
@@ -1626,18 +1629,6 @@ body[data-theme='dark'] .horizontal-item {
     margin-bottom: 0.5rem;
 }
 
-/* Contenedor del círculo de quintas */
-.circle-of-fifths-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    box-sizing: border-box;
-    background-color: rgba(31, 41, 55, 0.9);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease, color 0.3s ease;
-}
 
 body[data-theme='light'] .circle-of-fifths-container {
     background-color: rgba(255, 255, 255, 0.9);

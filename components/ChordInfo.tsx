@@ -9,12 +9,16 @@ import {
   tetradLabels,
 } from "@/data/chordFormulas";
 import { chordShapes, ShapeType, ChordType, Position } from "@/data/chordShapes";
+import { useMusicNotation } from '@/contexts/MusicNotationContext';
+import { convertNote } from '@/utils/noteConverter';
 
 const ChordInfo = () => {
   const [tone, setTone] = useState("C");
   const [type, setType] = useState<ChordType>("Mayor");
   const [shape, setShape] = useState<ShapeType>("Fundamental");
   const [isTetrad, setIsTetrad] = useState(false);
+
+  const { notation } = useMusicNotation();
 
   const baseFormula = chordFormulas[type];
   const baseLabels = chordLabels[type];
@@ -75,7 +79,7 @@ const ChordInfo = () => {
           >
             {chromaticScale.map((note) => (
               <option key={note} value={note}>
-                {note}
+                {convertNote(note, notation)}
               </option>
             ))}
           </select>
@@ -121,7 +125,7 @@ const ChordInfo = () => {
           <div className="notes-list">
             {chordNotes.map((note, idx) => (
               <div className="note-item" key={idx}>
-                <span className="note-degree">{idx + 1}º</span> {note}
+                <span className="note-degree">{idx + 1}º</span> {convertNote(note, notation)}
               </div>
             ))}
           </div>
@@ -130,7 +134,7 @@ const ChordInfo = () => {
 
       <p className="chord-explanation" style={{ textAlign: 'center', width: '100%' }}>{explanation}</p>
       <p className="chord-notes" style={{ textAlign: 'center', width: '100%' }}>
-        Notas en <span className="selected-tone-block">{tone}</span> <span className="selected-scale-type-block">{type}</span>: {chordNotes.join(', ')}
+        Notas en <span className="selected-tone-block">{convertNote(tone, notation)}</span> <span className="selected-scale-type-block">{type}</span>: {chordNotes.map(note => convertNote(note, notation)).join(', ')}
       </p>
 
       {/* <FretboardChord positions={transposed} /> */}
