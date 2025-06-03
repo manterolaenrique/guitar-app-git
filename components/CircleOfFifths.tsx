@@ -45,6 +45,14 @@ const CircleOfFifths = () => {
       </div>
       <div className="circle-of-fifths-responsive">
         <svg className="circle-svg" viewBox="0 0 900 900" width="100%" height="100%">
+          {/* Fondo resaltado para la nota seleccionada */}
+          {selected !== null && (
+            <path
+              d={`M 450 450 L ${450 + 370 * Math.cos(((selected) / SEGMENTS) * 2 * Math.PI - Math.PI/2)} ${450 + 370 * Math.sin(((selected) / SEGMENTS) * 2 * Math.PI - Math.PI/2)} A 370 370 0 0 1 ${450 + 370 * Math.cos(((selected + 1) / SEGMENTS) * 2 * Math.PI - Math.PI/2)} ${450 + 370 * Math.sin(((selected + 1) / SEGMENTS) * 2 * Math.PI - Math.PI/2)} Z`}
+              fill="rgba(99, 102, 241, 0.1)"
+              className="selected-sector"
+            />
+          )}
           {/* Divisiones */}
           {circleOfFifthsNotes.map((_, idx) => {
             const angle = (idx / SEGMENTS) * 360;
@@ -70,9 +78,25 @@ const CircleOfFifths = () => {
                 style={{ cursor: 'pointer' }}
                 onClick={() => setSelected(idx)}
               >
-                <text x={x} y={y} textAnchor="middle" alignmentBaseline="middle" className={`circle-label-major-svg note-svg-${note.colorClass}`}>{getNoteLabel(note, 'major')}</text>
+                <text 
+                  x={x} 
+                  y={y} 
+                  textAnchor="middle" 
+                  alignmentBaseline="middle" 
+                  className={`circle-label-major-svg note-svg-${note.colorClass} ${selected === idx ? 'selected-note' : ''}`}
+                >
+                  {getNoteLabel(note, 'major')}
+                </text>
                 {getNoteLabel(note, 'enharmonicMajor') && (
-                  <text x={x} y={y + 38} textAnchor="middle" alignmentBaseline="middle" className="circle-label-enharmonic">{getNoteLabel(note, 'enharmonicMajor')}</text>
+                  <text 
+                    x={x} 
+                    y={y + 38} 
+                    textAnchor="middle" 
+                    alignmentBaseline="middle" 
+                    className={`circle-label-enharmonic ${selected === idx ? 'selected-note' : ''}`}
+                  >
+                    {getNoteLabel(note, 'enharmonicMajor')}
+                  </text>
                 )}
               </g>
             );
@@ -88,9 +112,25 @@ const CircleOfFifths = () => {
                 style={{ cursor: 'pointer' }}
                 onClick={() => setSelected(idx)}
               >
-                <text x={x} y={y} textAnchor="middle" alignmentBaseline="middle" className={`circle-label-minor-svg note-svg-${note.colorClass}`}>{getNoteLabel(note, 'minor')}</text>
+                <text 
+                  x={x} 
+                  y={y} 
+                  textAnchor="middle" 
+                  alignmentBaseline="middle" 
+                  className={`circle-label-minor-svg note-svg-${note.colorClass} ${selected === idx ? 'selected-note' : ''}`}
+                >
+                  {getNoteLabel(note, 'minor')}
+                </text>
                 {getNoteLabel(note, 'enharmonicMinor') && (
-                  <text x={x} y={y + 34} textAnchor="middle" alignmentBaseline="middle" className="circle-label-enharmonic-minor">{getNoteLabel(note, 'enharmonicMinor')}</text>
+                  <text 
+                    x={x} 
+                    y={y + 34} 
+                    textAnchor="middle" 
+                    alignmentBaseline="middle" 
+                    className={`circle-label-enharmonic-minor ${selected === idx ? 'selected-note' : ''}`}
+                  >
+                    {getNoteLabel(note, 'enharmonicMinor')}
+                  </text>
                 )}
               </g>
             );
