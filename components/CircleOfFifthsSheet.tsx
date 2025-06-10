@@ -20,7 +20,7 @@ const CircleOfFifthsSheet = () => {
         {circleOfFifthsNotes.map((note, index) => (
           <div key={index} className="sheet-row">
             <div className="major-key">{convertNote(note.major, notation)}</div>
-            <div className="minor-key">{convertNote(note.minor, notation)}</div>
+            <div className="minor-key">{`${convertNote(note.minor, notation)}m`}</div>
             <div className="sharps">{note.sharps || 0}</div>
             <div className="flats">{note.flats || 0}</div>
             <div className="altered-notes">

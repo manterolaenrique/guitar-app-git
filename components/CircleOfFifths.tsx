@@ -13,12 +13,20 @@ const CircleOfFifths = () => {
   // Función para obtener el texto según notación
   const getNoteLabel = (note: CircleNote, type: 'major' | 'minor' | 'enharmonicMajor' | 'enharmonicMinor') => {
     if (notation === 'spanish') {
-      return note[type] || '';
+      if (type === 'major') return note.major || '';
+      if (type === 'minor') return `${note.minor || ''}m`;
+      if (type === 'enharmonicMajor') return note.enharmonicMajor || '';
+      if (type === 'enharmonicMinor') {
+        const label = note.enharmonicMinor ? `${note.enharmonicMinor}m` : '';
+        console.log('DEBUG: Spanish enharmonicMinor label:', label);
+        return label;
+      }
+      return '';
     } else {
       if (type === 'major') return note.major_en;
-      if (type === 'minor') return note.minor_en;
+      if (type === 'minor') return `${note.minor_en}m`;
       if (type === 'enharmonicMajor') return note.enharmonicMajor_en || '';
-      if (type === 'enharmonicMinor') return note.enharmonicMinor_en || '';
+      if (type === 'enharmonicMinor') return note.enharmonicMinor_en ? `${note.enharmonicMinor_en}m` : '';
       return '';
     }
   };

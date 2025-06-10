@@ -1,6 +1,6 @@
 /* === TEMA CLARO === */
 body[data-theme='light'] {
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
     color: #111;
 }
 
@@ -1795,6 +1795,14 @@ svg .circle-armature-group {
 body[data-theme='light'] .circle-sheet-container {
   background-color: rgba(255, 255, 255, 0.9);
   color: #111;
+}
+
+body[data-theme='light'] .major-key,
+body[data-theme='light'] .minor-key,
+body[data-theme='light'] .sharps,
+body[data-theme='light'] .flats,
+body[data-theme='light'] .altered-notes {
+  color: #333;
 }
 
 .sheet-grid {
