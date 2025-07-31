@@ -3,7 +3,10 @@ const Footer = () => {
       <footer className="footer">
         <div className="footer-content">
           <p className="footer-text">
-            © 2025 Manterola Enrique. Proyecto desarrollado con Next.js + React.
+            © 2025 GuitarFlow - Herramientas de Guitarra Modernas
+          </p>
+          <p className="footer-text mt-1">
+            Desarrollado con Next.js + React + Framer Motion
           </p>
           <p className="footer-text mt-1">
             Contacto:
@@ -12,12 +15,12 @@ const Footer = () => {
             </a>
             ·
             <a
-              href="https://www.linkedin.com/in/enrique-manterola-8bb572189/"
+              href="https://porfolio-lilac-seven.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link"
             >
-              LinkedIn
+              Portafolio
             </a>
           </p>
         </div>

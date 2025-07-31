@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Bebas_Neue, Playfair_Display, Raleway } from "next/font/google";
 import Navbar from '../components/Navbar';
 import Footer from "../components/Footer";
 import TituloAnimado from "../components/TituloAnimado";
@@ -7,19 +7,25 @@ import { MusicNotationProvider } from "../contexts/MusicNotationContext";
 import "./globals.css";
 import "../styles/globals.css";
 
-const inter = Inter({
-  variable: "--font-sans",
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas",
+  weight: "400",
   subsets: ["latin"],
 });
 
-const robotoMono = Roboto_Mono({
-  variable: "--font-mono",
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+});
+
+const raleway = Raleway({
+  variable: "--font-raleway",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Guitar App",
-  description: "Proyecto desarrollado con Next.js + React",
+  title: "GuitarFlow - Herramientas de Guitarra",
+  description: "Aplicación moderna para músicos con afinador, escalas, acordes y más herramientas de guitarra",
 };
 
 export default function RootLayout({
@@ -28,9 +34,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
      <body
-        className={`${inter.variable} ${robotoMono.variable} antialiased`}
+        className={`${bebasNeue.variable} ${playfairDisplay.variable} ${raleway.variable} antialiased`}
         data-theme="dark"
       >
         <MusicNotationProvider>

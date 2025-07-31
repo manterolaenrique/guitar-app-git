@@ -1,25 +1,52 @@
 "use client";
 import React from 'react';
 import { motion } from "framer-motion";
-import { Guitar } from 'lucide-react';
-
+import { Guitar, Music, Mic } from 'lucide-react';
 
 const TituloAnimado = () => {
     return (
-      <div className="titulo-container">
-        <div className="background-image"></div>
-        <motion.h1
-          className="titulo titulo-rock"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
+      <motion.div 
+        className="titulo-container"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+      >
+        <motion.div
+          className="titulo-wrapper"
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
         >
-          <Guitar className="guitar-icon left" />
-          <span className="titulo-text">Herramientas de Guitarra</span>
-          <Guitar className="guitar-icon right" />
-        </motion.h1>
-        
-      </div>
+          <motion.div
+            className="titulo-icons"
+            initial={{ opacity: 0, rotate: -180 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+          >
+            <Music className="icon-left" />
+            <Guitar className="icon-center" />
+            <Mic className="icon-right" />
+          </motion.div>
+          
+          <motion.h1
+            className="titulo-principal"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
+          >
+            <span className="titulo-text">GuitarFlow</span>
+          </motion.h1>
+          
+          <motion.p
+            className="titulo-subtitle"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1, ease: "easeOut" }}
+          >
+            Herramientas de Guitarra Modernas
+          </motion.p>
+        </motion.div>
+      </motion.div>
     );
   };
 

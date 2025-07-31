@@ -3,28 +3,47 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+  /* Nueva paleta de colores moderna */
+  --background: #0f172a; /* Negro azulado */
+  --foreground: #fef3c7; /* Crema */
+  --primary: #f59e0b; /* Naranja suave */
+  --primary-dark: #d97706; /* Naranja más oscuro */
+  --accent: #fef3c7; /* Crema */
+  --accent-dark: #fde68a; /* Crema más oscuro */
+  --text-primary: #fef3c7;
+  --text-secondary: #fbbf24;
+  --border-color: #1e293b;
+  --background-secondary: #1e293b;
+  --background-hover: #334155;
+  
+  /* Nuevas fuentes */
+  --font-bebas: var(--font-bebas);
+  --font-playfair: var(--font-playfair);
+  --font-raleway: var(--font-raleway);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --font-bebas: var(--font-bebas);
+  --font-playfair: var(--font-playfair);
+  --font-raleway: var(--font-raleway);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #fef3c7;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-raleway), Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
