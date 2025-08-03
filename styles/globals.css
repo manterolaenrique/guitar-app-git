@@ -65,6 +65,21 @@ main {
         box-sizing: border-box;
     }
 
+    .fretboard-loading {
+        min-height: 250px;
+        padding: 1.5rem;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border-width: 3px;
+    }
+
+    .fretboard-loading p {
+        font-size: 1rem;
+    }
+
     .fretboard {
         min-width: calc(25 * 32px);
         width: min-content;
@@ -125,6 +140,21 @@ main {
 
     .fretboard-container {
         padding: 0.3rem;
+    }
+
+    .fretboard-loading {
+        min-height: 200px;
+        padding: 1rem;
+    }
+
+    .spinner {
+        width: 35px;
+        height: 35px;
+        border-width: 2px;
+    }
+
+    .fretboard-loading p {
+        font-size: 0.9rem;
     }
 
     .fretboard {
@@ -628,15 +658,23 @@ body[data-theme='dark'] .scale-selector select {
 .strings-container {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: -1rem;
 }
 
 .string-row {
     display: grid;
     grid-template-columns: repeat(25, minmax(35px, 1fr));
-    margin-bottom: 0.75rem;
+    margin-bottom: -0.5rem;
     position: relative;
     z-index: 2;
+}
+
+.string-row-scale {
+    margin-bottom: 1rem;
+}
+
+.string-row-all {
+    margin-bottom: 1rem;
 }
 
 .string-row:last-child {
@@ -660,14 +698,10 @@ body[data-theme='dark'] .scale-selector select {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 3.5rem;
+    height: 3rem;
     z-index: 3;
-    overflow: hidden; /* Prevent notes from overflowing */
-    padding: 0.5rem; /* Increased padding to add more space between notes */
-}
-
-.fret:not(:first-child) {
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden; 
+    padding: -0.5rem; 
 }
 
 /* Espacio especial para la cejuela (traste 0) */
@@ -2254,4 +2288,85 @@ body[data-theme='light'] .altered-notes {
   transition: all 0.3s ease;
   filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.3));
 }
+
+/* === SPINNER Y LOADING === */
+.fretboard-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    background: linear-gradient(135deg, #7b4c2f, #a76a3d);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+    border: 3px solid rgba(139, 69, 19, 0.3);
+}
+
+.fretboard-loading p {
+    color: #fef3c7;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    text-align: center;
+    font-family: var(--font-raleway), sans-serif;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(254, 243, 199, 0.3);
+    border-top: 4px solid #f59e0b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+        transform: scale(1.05);
+    }
+}
+
+/* Animación de fade para el fretboard */
+.fretboard {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === FRETBOARD === */
 

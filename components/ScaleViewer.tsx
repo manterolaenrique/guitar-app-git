@@ -72,6 +72,8 @@ const ScaleViewer = () => {
   const [scaleType, setScaleType] = useState('Pentatónica Mayor');
   const [instrumentType, setInstrumentType] = useState<InstrumentType>('guitar');
   const [displayMode, setDisplayMode] = useState<DisplayMode>('scale');
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
   
   const pattern = scalePatterns[scaleType];
   const scaleNotesBase = getScaleNotes(tone, pattern);
@@ -79,8 +81,46 @@ const ScaleViewer = () => {
   const fretboard = getFretboard(scaleNotesBase, instrumentType, displayMode, tone, fretCount);
   const scaleInfo = scaleFormulas[scaleType];
 
+  // Manejar cambios en el modo de visualización con loading
+  const handleDisplayModeChange = (newMode: DisplayMode) => {
+    setIsLoading(true);
+    setLoadingMessage('Cambiando visualización...');
+    setDisplayMode(newMode);
+    
+    // Simular un pequeño delay para que se vea el spinner
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
+  };
+
   const handleNotationChange = (newTone: string) => {
+    setIsLoading(true);
+    setLoadingMessage('Cambiando tono...');
     setTone(newTone);
+    
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
+  };
+
+  const handleScaleTypeChange = (newScaleType: string) => {
+    setIsLoading(true);
+    setLoadingMessage('Cambiando escala...');
+    setScaleType(newScaleType);
+    
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
+  };
+
+  const handleInstrumentChange = (newInstrument: InstrumentType) => {
+    setIsLoading(true);
+    setLoadingMessage('Cambiando instrumento...');
+    setInstrumentType(newInstrument);
+    
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
   };
 
   const getNoteClass = (note: FretNote | string): string => {
@@ -91,7 +131,7 @@ const ScaleViewer = () => {
       return 'note-marker non-scale';
     } else {
       if (typeof note === 'string') {
-        if (!note) return '';
+        if (!note) return 'note-marker non-scale';
         const tonicBaseNote = chromaticScale[chromaticScale.indexOf(tone)];
         return note === tonicBaseNote ? 'note-marker root' : 'note-marker scale';
       }
@@ -133,7 +173,7 @@ const ScaleViewer = () => {
           <label>Tipo de escala:</label>
           <select 
             value={scaleType} 
-            onChange={(e) => setScaleType(e.target.value)}
+            onChange={(e) => handleScaleTypeChange(e.target.value)}
           >
             {Object.keys(scalePatterns).map((type) => (
               <option key={type} value={type}>{type}</option>
@@ -144,7 +184,7 @@ const ScaleViewer = () => {
           <label>Instrumento:</label>
           <select 
             value={instrumentType} 
-            onChange={(e) => setInstrumentType(e.target.value as InstrumentType)}
+            onChange={(e) => handleInstrumentChange(e.target.value as InstrumentType)}
           >
             <option value="guitar">Guitarra (6 cuerdas)</option>
             <option value="bass">Bajo (4 cuerdas)</option>
@@ -154,7 +194,7 @@ const ScaleViewer = () => {
           <label>Modo de visualización:</label>
           <select 
             value={displayMode} 
-            onChange={(e) => setDisplayMode(e.target.value as DisplayMode)}
+            onChange={(e) => handleDisplayModeChange(e.target.value as DisplayMode)}
           >
             <option value="all">Mostrar todas las notas</option>
             <option value="scale">Mostrar solo notas de la escala</option>
@@ -163,27 +203,34 @@ const ScaleViewer = () => {
       </div>
 
       <div className="fretboard-container">
-        <div className="fretboard">
-          <div className="fret-numbers">
-            {Array.from({ length: TOTAL_FRETS + 1 }, (_, i) => (
-              <div key={i} className="fret-number">{i}</div>
-            ))}
+        {isLoading ? (
+          <div className="fretboard-loading">
+            <div className="spinner"></div>
+            <p>{loadingMessage}</p>
           </div>
-          <div className="strings-container">
-            {fretboard.map((string, stringIdx) => (
-              <div key={stringIdx} className="string-row">
-                {string.map((note, fretIdx) => (
-                  <div
-                    key={fretIdx}
-                    className={`fret ${getNoteClass(note)}`}
-                  >
-                    {getNoteDisplay(note)}
-                  </div>
-                ))}
-              </div>
-            ))}
+        ) : (
+          <div className="fretboard">
+            <div className="fret-numbers">
+              {Array.from({ length: TOTAL_FRETS + 1 }, (_, i) => (
+                <div key={i} className="fret-number">{i}</div>
+              ))}
+            </div>
+            <div className="strings-container">
+              {fretboard.map((string, stringIdx) => (
+                <div key={stringIdx} className={`string-row ${displayMode === 'all' ? 'string-row-all' : 'string-row-scale'}`}>
+                  {string.map((note, fretIdx) => (
+                    <div
+                      key={fretIdx}
+                      className={`fret ${getNoteClass(note)}`}
+                    >
+                      {getNoteDisplay(note)}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className="scale-info-row">
