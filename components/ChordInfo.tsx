@@ -1,6 +1,6 @@
 "use client";
+
 import { useState } from "react";
-import FretboardChord from "./fretboard/FretboardChord";
 import {
   chromaticScale,
   chordFormulas,
@@ -8,16 +8,16 @@ import {
   tetradExtensions,
   tetradLabels,
 } from "@/data/chordFormulas";
-import { chordShapes, ShapeType, ChordType, Position } from "@/data/chordShapes";
+import { ChordType } from "@/data/chordShapes";
 import { useMusicNotation } from '@/contexts/MusicNotationContext';
 import { convertNote } from '@/utils/noteConverter';
+
+const chordTypes: ChordType[] = ["Mayor", "Menor", "Disminuido", "Aumentado"];
 
 const ChordInfo = () => {
   const [tone, setTone] = useState("C");
   const [type, setType] = useState<ChordType>("Mayor");
-  const [shape, setShape] = useState<ShapeType>("Fundamental");
   const [isTetrad, setIsTetrad] = useState(false);
-
   const { notation } = useMusicNotation();
 
   const baseFormula = chordFormulas[type];
@@ -29,115 +29,141 @@ const ChordInfo = () => {
     ? [...baseLabels, ...tetradLabels[type]]
     : baseLabels;
 
-  const transposePositions = (
-    positions: Position[],
-    fromNote: string,
-    toNote: string
-  ): Position[] => {
-    const fromIdx = chromaticScale.indexOf(fromNote);
-    const toIdx = chromaticScale.indexOf(toNote);
-    const diff = (toIdx - fromIdx + 12) % 12;
-
-    const baseFrets = positions.map((p) => p.fret);
-    const highest = Math.max(...baseFrets);
-    const hasTetrad = isTetrad && finalLabels.length > 3;
-
-    const extra: Position[] = hasTetrad
-      ? [{ string: 0, fret: highest + 1, label: finalLabels[3] }]
-      : [];
-
-    return [...positions, ...extra].map((pos) => ({
-      ...pos,
-      fret: pos.fret + diff,
-    }));
-  };
-
   const getChordNotes = (root: string, formula: number[]): string[] => {
     const rootIndex = chromaticScale.indexOf(root);
-    return formula.map((i) => chromaticScale[(rootIndex + i) % 12]);
+    return formula.map((interval) => chromaticScale[(rootIndex + interval) % 12]);
   };
 
-  const tonicShape = chordShapes[type][shape];
-  const transposed = transposePositions(tonicShape, "C", tone);
   const chordNotes = getChordNotes(tone, finalFormula);
 
   const explanation = isTetrad
     ? `Una cuatriada ${type.toLowerCase()} se forma con los grados: ${finalLabels.join(', ')}.`
     : `Una tríada ${type.toLowerCase()} contiene los grados: ${finalLabels.join(', ')}.`;
 
+  const chordDisplayName = `${convertNote(tone, notation)} ${type}${isTetrad ? ' 7' : ''}`;
+
   return (
-    <div className="chord-container scale-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <h2 className="chord-title scale-title" style={{ textAlign: 'center', width: '100%' }}>Visualizador de Acordes</h2>
+    <div className="chord-container scale-container chord-workspace">
+      <header className="chord-workspace-header">
+        <span className="section-kicker">TEORIA APLICADA</span>
+        <h2 className="chord-title chord-workspace-title">Triadas y acordes</h2>
+        <p className="chord-workspace-text">
+          Explorá la estructura armónica del acorde seleccionado con un layout más claro, manteniendo
+          intactas las fórmulas, intervalos y notas generadas por la app.
+        </p>
+      </header>
 
-      <div className="chord-form scale-selector" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', width: '100%' }}>
-        <div>
-          <label className="chord-label">Tonalidad</label>
-          <select
-            value={tone}
-            onChange={(e) => setTone(e.target.value)}
-            className="chord-select"
-          >
-            {chromaticScale.map((note) => (
-              <option key={note} value={note}>
-                {convertNote(note, notation)}
-              </option>
+      <div className="chord-workspace-grid">
+        <section className="chord-control-panel">
+          <div className="chord-control-group">
+            <span className="chord-panel-kicker">Tonalidad</span>
+            <div className="chord-tone-grid">
+              {chromaticScale.map((note) => {
+                const isActive = note === tone;
+                return (
+                  <button
+                    key={note}
+                    type="button"
+                    className={`chord-tone-button ${isActive ? 'is-active' : ''}`}
+                    onClick={() => setTone(note)}
+                  >
+                    {convertNote(note, notation)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="chord-control-group">
+            <span className="chord-panel-kicker">Tipo de acorde</span>
+            <div className="chord-type-list">
+              {chordTypes.map((currentType) => {
+                const isActive = currentType === type;
+                return (
+                  <button
+                    key={currentType}
+                    type="button"
+                    className={`chord-type-button ${isActive ? 'is-active' : ''}`}
+                    onClick={() => setType(currentType)}
+                  >
+                    <span>{currentType}</span>
+                    <span className="chord-type-suffix">
+                      {currentType === 'Mayor' ? 'M' : currentType === 'Menor' ? 'm' : currentType === 'Aumentado' ? 'aug' : 'dim'}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="chord-extension-toggle">
+            <div>
+              <span className="chord-panel-kicker">Extensiones</span>
+              <p className="chord-extension-copy">Agregar séptima para ver la cuatriada resultante.</p>
+            </div>
+            <label className="chord-toggle-switch">
+              <input
+                type="checkbox"
+                checked={isTetrad}
+                onChange={() => setIsTetrad(!isTetrad)}
+              />
+              <span className="chord-toggle-slider" />
+            </label>
+          </div>
+        </section>
+
+        <section className="chord-visual-panel">
+          <div className="chord-visual-notes">
+            {chordNotes.map((note, index) => (
+              <div key={`${note}-${index}`} className={`chord-note-orb ${index === 0 ? 'is-root' : ''}`}>
+                <span className="chord-note-role">{finalLabels[index]}</span>
+                <div className="chord-note-circle">
+                  <span className="chord-note-letter">{convertNote(note, notation)}</span>
+                </div>
+                <span className="chord-note-degree">{index + 1}</span>
+              </div>
             ))}
-          </select>
-        </div>
-        <div>
-          <label className="chord-label">Tipo de acorde</label>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value as ChordType)}
-            className="chord-select"
-          >
-            {["Mayor", "Menor", "Disminuido", "Aumentado"].map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="chord-checkbox-wrapper">
-          <input
-            type="checkbox"
-            checked={isTetrad}
-            onChange={() => setIsTetrad(!isTetrad)}
-            className="mr-2"
-          />
-          <label>Agregar séptima (cuatriada)</label>
-        </div>
+          </div>
+
+          <div className="chord-visual-summary">
+            <h3 className="chord-visual-title">{chordDisplayName}</h3>
+            <p className="chord-visual-subtitle">Intervalos: {finalLabels.join(' — ')}</p>
+          </div>
+        </section>
       </div>
 
-      <div className="chord-info-row" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', width: '100%' }}>
-        <div className="chord-info-block">
+      <section className="chord-details-grid">
+        <article className="chord-detail-card">
           <h3 className="scale-info-title">Grados</h3>
-          <div className="intervals-list">
-            {finalLabels.map((label, idx) => (
-              <div className="interval-item" key={idx}>
-                <span className="interval-degree">{idx + 1}º</span> {label}
+          <div className="chord-detail-list">
+            {finalLabels.map((label, index) => (
+              <div className="interval-item" key={index}>
+                <span className="interval-degree">{index + 1}º</span> {label}
               </div>
             ))}
           </div>
-        </div>
-        <div className="chord-info-block">
+        </article>
+
+        <article className="chord-detail-card">
           <h3 className="scale-info-title">Notas</h3>
-          <div className="notes-list">
-            {chordNotes.map((note, idx) => (
-              <div className="note-item" key={idx}>
-                <span className="note-degree">{idx + 1}º</span> {convertNote(note, notation)}
+          <div className="chord-detail-list">
+            {chordNotes.map((note, index) => (
+              <div className="note-item" key={index}>
+                <span className="note-degree">{index + 1}º</span> {convertNote(note, notation)}
               </div>
             ))}
           </div>
-        </div>
-      </div>
+        </article>
 
-      <p className="chord-explanation" style={{ textAlign: 'center', width: '100%' }}>{explanation}</p>
-      <p className="chord-notes" style={{ textAlign: 'center', width: '100%' }}>
-        Notas en <span className="selected-tone-block">{convertNote(tone, notation)}</span> <span className="selected-scale-type-block">{type}</span>: {chordNotes.map(note => convertNote(note, notation)).join(', ')}
-      </p>
-
-      {/* <FretboardChord positions={transposed} /> */}
+        <article className="chord-detail-card chord-detail-copy">
+          <h3 className="scale-info-title">Lectura rápida</h3>
+          <p className="chord-explanation">{explanation}</p>
+          <p className="chord-notes">
+            Notas en <span className="selected-tone-block">{convertNote(tone, notation)}</span>{' '}
+            <span className="selected-scale-type-block">{type}</span>: {chordNotes.map((note) => convertNote(note, notation)).join(', ')}
+          </p>
+        </article>
+      </section>
     </div>
   );
 };

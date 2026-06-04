@@ -1,49 +1,104 @@
-
 "use client";
-import * as React from "react";
-import type { JSX } from "react";
-import { chromaticScale } from "@/data/chordFormulas";
+
+import { Fragment, useMemo } from "react";
 import type { Position } from "@/data/chordShapes";
 
 interface FretboardChordProps {
   positions: Position[];
 }
 
-const strings = ['E', 'B', 'G', 'D', 'A', 'E']; // 1ª a 6ª (de aguda a grave)
+const strings = ["E", "B", "G", "D", "A", "E"];
 const fretCount = 13;
+const markerFrets = new Set([3, 5, 7, 9, 12]);
 
-const FretboardChord: React.FC<FretboardChordProps> = ({ positions }) => {
-  const getCell = (stringIdx: number, fretIdx: number): JSX.Element | null => {
-    const match = positions.find(p => p.string === stringIdx && p.fret === fretIdx);
-    if (!match) return null;
+const FretboardChord = ({ positions }: FretboardChordProps) => {
+  const positionMap = useMemo(
+    () => new Map(positions.map((position) => [`${position.string}-${position.fret}`, position])),
+    [positions],
+  );
 
-    const isTonic = match.label === 'T';
-    const bgClass = isTonic ? 'bg-red-600 text-white' : 'bg-yellow-300 text-black';
+  const activeFrets = useMemo(
+    () => positions.filter((position) => position.fret > 0).map((position) => position.fret),
+    [positions],
+  );
 
-    return (
-      <div className={`w-12 h-12 flex items-center justify-center font-bold border border-gray-300 ${bgClass}`}>
-        {match.label}
-      </div>
-    );
-  };
+  const minActiveFret = activeFrets.length ? Math.min(...activeFrets) : 0;
+  const maxActiveFret = activeFrets.length ? Math.max(...activeFrets) : 0;
 
   return (
-    <div className="overflow-x-auto">
-      <div className="flex">
-        {Array.from({ length: fretCount }, (_, fretIdx) => (
-          <div key={fretIdx} className="flex flex-col">
-            {strings.map((_, stringIdx) => (
-              <div
-                key={stringIdx}
-                className="w-12 h-12 border border-gray-300 flex items-center justify-center bg-[#fbe8c6]"
-              >
-                {getCell(5 - stringIdx, fretIdx)}
-              </div>
-            ))}
-          </div>
-        ))}
+    <section className="chord-fretboard-shell">
+      <div className="chord-fretboard-header">
+        <div>
+          <span className="chord-panel-kicker">Mapa de posiciones</span>
+          <h3 className="chord-fretboard-title">Distribucion sobre el mastil</h3>
+        </div>
+
+        <div className="chord-fretboard-stats">
+          <span className="scale-stat-chip">
+            <strong>{positions.length}</strong>
+            voces
+          </span>
+          <span className="scale-stat-chip">
+            <strong>{minActiveFret}</strong>
+            traste inicial
+          </span>
+          <span className="scale-stat-chip">
+            <strong>{maxActiveFret}</strong>
+            traste final
+          </span>
+        </div>
       </div>
-    </div>
+
+      <div className="chord-fretboard-scroll">
+        <div
+          className="chord-fretboard-grid"
+          role="img"
+          aria-label="Distribucion de posiciones del acorde sobre el mastil"
+        >
+          <div className="chord-fretboard-corner">Str</div>
+
+          {Array.from({ length: fretCount }, (_, fretIdx) => (
+            <div key={`fret-header-${fretIdx}`} className="chord-fret-number">
+              {fretIdx}
+            </div>
+          ))}
+
+          {strings.map((stringName, displayIndex) => {
+            const stringIdx = 5 - displayIndex;
+
+            return (
+              <Fragment key={`string-row-${stringIdx}`}>
+                <div className="chord-string-label">{stringName}</div>
+
+                {Array.from({ length: fretCount }, (_, fretIdx) => {
+                  const match = positionMap.get(`${stringIdx}-${fretIdx}`);
+                  const isTonic = match?.label === "T";
+                  const hasMarker = markerFrets.has(fretIdx);
+
+                  return (
+                    <div
+                      key={`cell-${stringIdx}-${fretIdx}`}
+                      className={`chord-fret-cell ${fretIdx === 0 ? "is-nut" : ""} ${hasMarker ? "has-dot" : ""}`}
+                    >
+                      {match ? (
+                        <div className={`chord-fret-marker ${isTonic ? "is-tonic" : ""}`}>
+                          <span>{match.label}</span>
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </Fragment>
+            );
+          })}
+        </div>
+      </div>
+
+      <p className="chord-fretboard-caption">
+        Vista tecnica de 6 cuerdas y 13 trastes, pensada para reutilizar las posiciones existentes sin alterar
+        el calculo del acorde.
+      </p>
+    </section>
   );
 };
 
