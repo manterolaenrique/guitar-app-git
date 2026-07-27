@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   ArrowLeftRight,
   ChevronLeft,
@@ -22,8 +23,10 @@ import {
   getProgressionFromDegrees,
   getScaleFamily,
   getTemplatesForScale,
+  progressionTemplates,
   supportedProgressionScales,
 } from '@/data/progressions';
+import { getScaleSlug, type ProgressionDeepLinkState } from '@/data/deepLinks';
 import { useMusicNotation } from '@/contexts/MusicNotationContext';
 import { convertNote } from '@/utils/noteConverter';
 
@@ -45,15 +48,41 @@ const defaultDegreesByFamily: Record<ScaleFamily, number[]> = {
   minor: [1, 6, 3, 7],
 };
 
+interface ProgressionLabProps {
+  initialState?: Partial<ProgressionDeepLinkState>;
+  syncUrl?: boolean;
+}
+
+const getValidTone = (value: string | undefined) => (
+  value && chromaticScale.includes(value) ? value : 'C'
+);
+
+const getValidScaleName = (value: SupportedScaleName | undefined): SupportedScaleName => (
+  value && supportedProgressionScales.includes(value) ? value : 'Jónico'
+);
+
+const getInitialDegrees = (initialState: Partial<ProgressionDeepLinkState> | undefined, scaleName: SupportedScaleName) => {
+  if (initialState?.degrees?.length) return initialState.degrees;
+
+  const template = progressionTemplates.find((item) => item.id === initialState?.templateId);
+  if (template && template.scaleFamily === getScaleFamily(scaleName)) return template.degrees;
+
+  return defaultDegreesByFamily[getScaleFamily(scaleName)];
+};
+
 const formatChordLabel = (chord: DegreeChord, notation: 'american' | 'spanish') =>
   `${convertNote(chord.note, notation)}${chord.quality}`;
 
-const ProgressionLab = () => {
+const ProgressionLab = ({ initialState, syncUrl = true }: ProgressionLabProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const { notation } = useMusicNotation();
-  const [tone, setTone] = useState('C');
-  const [scaleName, setScaleName] = useState<SupportedScaleName>('Jónico');
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
-  const [builderDegrees, setBuilderDegrees] = useState<number[]>(defaultDegreesByFamily.major);
+  const [tone, setTone] = useState(() => getValidTone(initialState?.root));
+  const [scaleName, setScaleName] = useState<SupportedScaleName>(() => getValidScaleName(initialState?.scale));
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(() => (
+    initialState?.degrees?.length ? '' : initialState?.templateId || ''
+  ));
+  const [builderDegrees, setBuilderDegrees] = useState<number[]>(() => getInitialDegrees(initialState, getValidScaleName(initialState?.scale)));
 
   const scaleFamily = useMemo(() => getScaleFamily(scaleName), [scaleName]);
   const diatonicChords = useMemo(() => getDiatonicChords(tone, scaleName), [tone, scaleName]);
@@ -81,16 +110,35 @@ const ProgressionLab = () => {
     }));
   }, [progressionChords, scaleFamily]);
 
+  useEffect(() => {
+    if (!syncUrl) return;
+
+    const params = new URLSearchParams({
+      root: tone,
+      scale: getScaleSlug(scaleName),
+    });
+
+    if (selectedTemplateId) {
+      params.set('template', selectedTemplateId);
+    } else if (builderDegrees.length) {
+      params.set('degrees', builderDegrees.join('-'));
+    }
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [builderDegrees, pathname, router, scaleName, selectedTemplateId, syncUrl, tone]);
+
   const handleLoadTemplate = (template: ProgressionTemplate) => {
     setSelectedTemplateId(template.id);
     setBuilderDegrees(template.degrees);
   };
 
   const handleAppendDegree = (degree: number) => {
+    setSelectedTemplateId('');
     setBuilderDegrees((currentDegrees) => [...currentDegrees, degree]);
   };
 
   const handleMoveStep = (index: number, direction: -1 | 1) => {
+    setSelectedTemplateId('');
     setBuilderDegrees((currentDegrees) => {
       const nextIndex = index + direction;
       if (nextIndex < 0 || nextIndex >= currentDegrees.length) return currentDegrees;
@@ -102,6 +150,7 @@ const ProgressionLab = () => {
   };
 
   const handleRemoveStep = (index: number) => {
+    setSelectedTemplateId('');
     setBuilderDegrees((currentDegrees) => currentDegrees.filter((_, stepIndex) => stepIndex !== index));
   };
 
@@ -201,7 +250,14 @@ const ProgressionLab = () => {
               <span>Cargar progresion comun</span>
             </button>
 
-            <button type="button" className="progression-cta progression-cta-secondary" onClick={() => setBuilderDegrees([])}>
+            <button
+              type="button"
+              className="progression-cta progression-cta-secondary"
+              onClick={() => {
+                setSelectedTemplateId('');
+                setBuilderDegrees([]);
+              }}
+            >
               <Trash2 className="progression-cta-icon" />
               <span>Limpiar</span>
             </button>

@@ -8,8 +8,9 @@ import {
 } from "next/font/google";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import TituloAnimado from "../components/TituloAnimado";
+import GlobalMetronomePlayer from "../components/GlobalMetronomePlayer";
 import { ThemeProvider } from "../components/ThemeProvider";
+import { MetronomeProvider } from "../contexts/MetronomeContext";
 import { MusicNotationProvider } from "../contexts/MusicNotationContext";
 import "./globals.css";
 import "../styles/globals.css";
@@ -42,8 +43,11 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GuitarFlow - Herramientas de Guitarra",
-  description: "Aplicación moderna para músicos con afinador, escalas, acordes y más herramientas de guitarra",
+  title: {
+    default: "GuitarFlow | Plataforma de estudio de guitarra",
+    template: "%s",
+  },
+  description: "Herramientas, lecciones, metodo de estudio y practica interactiva para aprender guitarra con claridad.",
 };
 
 export default function RootLayout({
@@ -59,16 +63,18 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <MusicNotationProvider>
-            <div className="app-shell">
-              <Navbar />
-              <div className="app-frame">
-                <TituloAnimado />
-                <main className="app-main">
-                  <div className="page-shell">{children}</div>
-                </main>
+            <MetronomeProvider>
+              <div className="app-shell">
+                <Navbar />
+                <div className="app-frame">
+                  <main className="app-main">
+                    <div className="page-shell">{children}</div>
+                  </main>
+                </div>
+                <Footer />
+                <GlobalMetronomePlayer />
               </div>
-              <Footer />
-            </div>
+            </MetronomeProvider>
           </MusicNotationProvider>
         </ThemeProvider>
       </body>

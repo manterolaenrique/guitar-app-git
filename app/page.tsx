@@ -1,162 +1,114 @@
+import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
-import {
-  ArrowRight,
-  Gauge,
-  Guitar,
-  Layers3,
-  Music2,
-  Route,
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Guitar, ListChecks, Target, Timer } from 'lucide-react';
 import ScaleViewer from '@/components/ScaleViewer';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
-const workflowCards = [
-  {
-    eyebrow: 'Fundamental',
-    title: 'Mapeá el tono',
-    description: 'Seleccioná la tónica, el tipo de escala y el instrumento para llevar la teoría al diapasón real.',
-    accent: 'accent-primary',
-  },
-  {
-    eyebrow: 'Precisión',
-    title: 'Visualizá el patrón',
-    description: 'Trabajá con una vista clara del mástil para entender la distribución de notas con foco técnico.',
-    accent: 'accent-secondary',
-  },
-  {
-    eyebrow: 'Práctica',
-    title: 'Estudiá con contexto',
-    description: 'Usá la app como estación de práctica para relacionar escalas, acordes y afinación desde un mismo flujo.',
-    accent: 'accent-tertiary',
-  },
-  {
-    eyebrow: 'Interfaz',
-    title: 'Alterná notación y tema',
-    description: 'La experiencia visual acompaña el estudio sin romper el cambio claro/oscuro ni la notación actual.',
-    accent: 'accent-primary-soft',
-  },
-];
+export const metadata: Metadata = {
+  title: 'GuitarFlow | Plataforma de estudio de guitarra',
+  description:
+    'Herramientas, lecciones, metrónomo, método de estudio y práctica interactiva para aprender guitarra con claridad.',
+};
 
-const toolCards = [
+const platformAreas = [
   {
-    href: '/tuner',
+    href: '/tools',
     icon: Guitar,
-    title: 'Afinador',
-    description: 'Afinación rápida con visualización clara para sesiones de práctica o grabación.',
+    title: 'Herramientas',
+    description: 'Mástil, acordes, progresiones, afinador y teoría aplicada.',
   },
   {
-    href: '/chords',
-    icon: Music2,
-    title: 'Triadas',
-    description: 'Explorá estructuras armónicas y entendé cómo se construyen los acordes sobre la guitarra.',
+    href: '/learn',
+    icon: BookOpen,
+    title: 'Aprender',
+    description: 'Lecciones cortas para técnica, teoría, improvisación y práctica.',
   },
   {
-    href: '/circle-of-fifths',
-    icon: Layers3,
-    title: 'Círculo de Quintas',
-    description: 'Conectá tonalidades, armaduras y relaciones entre acordes desde una vista unificada.',
+    href: '/metronome',
+    icon: Timer,
+    title: 'Metrónomo',
+    description: 'Pulso persistente para ensayar mientras navegás por la app.',
   },
   {
-    href: '/progressions',
-    icon: Route,
-    title: 'Progresiones',
-    description: 'Construí secuencias diatónicas, analizá su función y transponelas dentro del centro tonal.',
+    href: '/method',
+    icon: Target,
+    title: 'Método',
+    description: 'El futuro ebook para ordenar estudio y aplicarlo musicalmente.',
   },
 ];
 
 export default function Home() {
   return (
-    <div className="home-page">
-      <section className="home-hero">
-        <div className="home-hero-panel">
-          <div className="home-hero-copy">
-            <span className="section-kicker">TECHNICAL EXCELLENCE</span>
-            <h1 className="home-hero-title">
-              Explorá escalas, acordes y <span>teoría musical</span> desde el mástil
-            </h1>
-            <p className="home-hero-text">
-              GuitarFlow transforma el estudio diario en un workspace visual: elegís el tono,
-              entendés la estructura y recorrés el diapasón con una interfaz inspirada en Stitch,
-              pero montada sobre la lógica real de tu app.
-            </p>
-          </div>
-
-          <div className="home-hero-actions">
-            <a href="#scale-workbench" className="home-cta home-cta-primary">
-              <span>Comenzar Ahora</span>
-              <ArrowRight className="home-cta-icon" />
-            </a>
-            <Link href="/about" className="home-cta home-cta-secondary">
-              Sobre el Proyecto
+    <div className="platform-page home-v2">
+      <section className="home-compact-hero">
+        <div className="home-compact-copy">
+          <span className="section-kicker">GUITARFLOW</span>
+          <h1>Estudiá guitarra con herramientas y práctica guiada</h1>
+          <p>
+            GuitarFlow conecta mástil, teoría, acordes, progresiones, afinación, metrónomo y método para que
+            practiques con contexto en vez de saltar entre ejercicios sueltos.
+          </p>
+          <div className="home-compact-actions">
+            <Link href="/tools" className="platform-button primary">
+              <span>Explorar herramientas</span>
+              <ArrowRight className="platform-button-icon" />
+            </Link>
+            <Link href="/learn" className="platform-button secondary">
+              Aprender guitarra
             </Link>
           </div>
+        </div>
 
-          <div className="home-hero-metrics">
-            <div className="home-metric-card">
-              <Gauge className="home-metric-icon" />
-              <div>
-                <span className="home-metric-label">Workspace activo</span>
-                <strong className="home-metric-value">Escalas + Diapasón</strong>
-              </div>
-            </div>
-            <div className="home-metric-card">
-              <Layers3 className="home-metric-icon" />
-              <div>
-                <span className="home-metric-label">Diseño aplicado</span>
-                <strong className="home-metric-value">Stitch adaptado a la app real</strong>
-              </div>
-            </div>
-          </div>
+        <div className="home-compact-grid" aria-label="Áreas principales de GuitarFlow">
+          {platformAreas.map(({ href, icon: Icon, title, description }) => (
+            <Link key={href} href={href} className="home-compact-card">
+              <Icon />
+              <strong>{title}</strong>
+              <span>{description}</span>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="home-workflow-grid">
-        {workflowCards.map((card) => (
-          <article key={card.title} className={`home-info-card ${card.accent}`}>
-            <span className="home-card-kicker">{card.eyebrow}</span>
-            <h2 className="home-card-title">{card.title}</h2>
-            <p className="home-card-text">{card.description}</p>
-          </article>
-        ))}
+      <section className="platform-image-band">
+        <Image
+          src="/images/guitarflow-study.png"
+          alt="Guitarra, cuaderno y herramientas digitales para estudiar con GuitarFlow"
+          width={1536}
+          height={512}
+          sizes="(max-width: 768px) 100vw, 1280px"
+          className="platform-image-band-media"
+          priority
+        />
       </section>
 
-      <section id="scale-workbench" className="home-workbench">
-        <div className="home-workbench-header">
-          <div>
-            <span className="section-kicker">VISUALIZADOR PRINCIPAL</span>
-            <h2 className="home-section-title">Diapasón dinámico para estudiar con intención</h2>
-          </div>
-          <p className="home-section-text">
-            El módulo real de escalas se mantiene intacto. En esta etapa solo cambiamos el contexto
-            visual para que el flujo se sienta más sólido, legible y alineado con Stitch.
-          </p>
-        </div>
-
+      <section id="scale-workbench" className="platform-section">
+        <SectionHeader
+          kicker="ÁREA DE PRÁCTICA"
+          title="Diapasón dinámico para estudiar con intención"
+          description="Visualizá escalas, tónicas e intervalos sobre el mástil y compartí configuraciones con URL."
+        />
         <div className="home-workbench-shell">
           <ScaleViewer />
         </div>
       </section>
 
-      <section className="home-tools">
-        <div className="home-tools-header">
-          <span className="section-kicker">ECOSISTEMA DE PRÁCTICA</span>
-          <h2 className="home-section-title">Herramientas conectadas para seguir explorando</h2>
-        </div>
-
-        <div className="home-tools-grid">
-          {toolCards.map(({ href, icon: Icon, title, description }) => (
-            <Link key={href} href={href} className="home-tool-card">
-              <div className="home-tool-icon-wrap">
-                <Icon className="home-tool-icon" />
-              </div>
-              <h3 className="home-tool-title">{title}</h3>
-              <p className="home-tool-text">{description}</p>
-              <span className="home-tool-link">
-                Abrir módulo
-                <ArrowRight className="home-tool-link-icon" />
-              </span>
-            </Link>
-          ))}
-        </div>
+      <section className="home-next-steps">
+        <Link href="/practice" className="home-next-step">
+          <ListChecks />
+          <div>
+            <strong>Armar una rutina</strong>
+            <span>Usá Práctica para ordenar bloques de estudio.</span>
+          </div>
+        </Link>
+        <Link href="/method" className="home-next-step">
+          <Target />
+          <div>
+            <strong>Conocer GuitarFlow Method</strong>
+            <span>El ebook futuro para pasar de ejercicios a música.</span>
+          </div>
+        </Link>
       </section>
     </div>
   );

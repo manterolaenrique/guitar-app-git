@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   chromaticScale,
   chordFormulas,
@@ -9,15 +10,38 @@ import {
   tetradLabels,
 } from "@/data/chordFormulas";
 import { ChordType } from "@/data/chordShapes";
+import type { ChordDeepLinkState } from "@/data/deepLinks";
 import { useMusicNotation } from '@/contexts/MusicNotationContext';
 import { convertNote } from '@/utils/noteConverter';
 
 const chordTypes: ChordType[] = ["Mayor", "Menor", "Disminuido", "Aumentado"];
 
-const ChordInfo = () => {
-  const [tone, setTone] = useState("C");
-  const [type, setType] = useState<ChordType>("Mayor");
-  const [isTetrad, setIsTetrad] = useState(false);
+interface ChordInfoProps {
+  initialState?: Partial<ChordDeepLinkState>;
+  syncUrl?: boolean;
+}
+
+const chordTypeSlugs: Record<ChordType, string> = {
+  Mayor: 'major',
+  Menor: 'minor',
+  Disminuido: 'diminished',
+  Aumentado: 'augmented',
+};
+
+const getValidTone = (value: string | undefined) => (
+  value && chromaticScale.includes(value) ? value : 'C'
+);
+
+const getValidChordType = (value: ChordType | undefined): ChordType => (
+  value && chordTypes.includes(value) ? value : 'Mayor'
+);
+
+const ChordInfo = ({ initialState, syncUrl = true }: ChordInfoProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [tone, setTone] = useState(() => getValidTone(initialState?.root));
+  const [type, setType] = useState<ChordType>(() => getValidChordType(initialState?.type));
+  const [isTetrad, setIsTetrad] = useState(() => Boolean(initialState?.tetrad));
   const { notation } = useMusicNotation();
 
   const baseFormula = chordFormulas[type];
@@ -41,6 +65,18 @@ const ChordInfo = () => {
     : `Una tríada ${type.toLowerCase()} contiene los grados: ${finalLabels.join(', ')}.`;
 
   const chordDisplayName = `${convertNote(tone, notation)} ${type}${isTetrad ? ' 7' : ''}`;
+
+  useEffect(() => {
+    if (!syncUrl) return;
+
+    const params = new URLSearchParams({
+      root: tone,
+      type: chordTypeSlugs[type],
+    });
+
+    if (isTetrad) params.set('tetrad', 'true');
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [isTetrad, pathname, router, syncUrl, tone, type]);
 
   return (
     <div className="chord-container scale-container chord-workspace">

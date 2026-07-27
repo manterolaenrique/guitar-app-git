@@ -1,7 +1,8 @@
 "use client";
 
 import type { CSSProperties } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { Layers3, Music2, Waypoints } from 'lucide-react';
 import {
   chromaticScale,
@@ -11,10 +12,16 @@ import {
   TOTAL_FRETS,
 } from '@/data/scaleData';
 import { scaleFormulas } from '@/data/scaleFormulas';
+import { getScaleSlug, type ScaleDeepLinkState } from '@/data/deepLinks';
 import { useMusicNotation } from '../contexts/MusicNotationContext';
 import { convertNote } from '../utils/noteConverter';
 
-type DisplayMode = 'all' | 'scale' | 'positions';
+type DisplayMode = 'all' | 'scale';
+
+interface ScaleViewerProps {
+  initialState?: Partial<ScaleDeepLinkState>;
+  syncUrl?: boolean;
+}
 
 interface FretNote {
   note: string;
@@ -62,12 +69,30 @@ const getChordsByDegree = (scaleType: string, scaleNotes: string[]) => {
   return scaleNotes.map((note, idx) => note + (chords[idx] || ''));
 };
 
-const ScaleViewer = () => {
+const getValidTone = (value: string | undefined) => (
+  value && chromaticScale.includes(value) ? value : 'C'
+);
+
+const getValidScaleType = (value: string | undefined) => (
+  value && scalePatterns[value] ? value : 'Pentatónica Mayor'
+);
+
+const getValidInstrument = (value: string | undefined): InstrumentType => (
+  value === 'bass' ? 'bass' : 'guitar'
+);
+
+const getValidDisplayMode = (value: string | undefined): DisplayMode => (
+  value === 'all' ? 'all' : 'scale'
+);
+
+const ScaleViewer = ({ initialState, syncUrl = false }: ScaleViewerProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const { notation } = useMusicNotation();
-  const [tone, setTone] = useState('C');
-  const [scaleType, setScaleType] = useState('Pentatónica Mayor');
-  const [instrumentType, setInstrumentType] = useState<InstrumentType>('guitar');
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('scale');
+  const [tone, setTone] = useState(() => getValidTone(initialState?.root));
+  const [scaleType, setScaleType] = useState(() => getValidScaleType(initialState?.scale));
+  const [instrumentType, setInstrumentType] = useState<InstrumentType>(() => getValidInstrument(initialState?.instrument));
+  const [displayMode, setDisplayMode] = useState<DisplayMode>(() => getValidDisplayMode(initialState?.view));
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
 
@@ -84,6 +109,19 @@ const ScaleViewer = () => {
   const fretGridStyle: CSSProperties = {
     gridTemplateColumns: `repeat(${totalFrets}, minmax(${fretMinSize}, 1fr))`,
   };
+
+  useEffect(() => {
+    if (!syncUrl) return;
+
+    const params = new URLSearchParams({
+      root: tone,
+      scale: getScaleSlug(scaleType),
+      instrument: instrumentType,
+      view: displayMode,
+    });
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [displayMode, instrumentType, pathname, router, scaleType, syncUrl, tone]);
 
   const handleDisplayModeChange = (newMode: DisplayMode) => {
     setIsLoading(true);

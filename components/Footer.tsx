@@ -1,27 +1,31 @@
 import Link from 'next/link';
 
+const footerLinks = [
+  { href: '/tools', label: 'Herramientas' },
+  { href: '/learn', label: 'Aprender' },
+  { href: '/practice', label: 'Práctica' },
+  { href: '/method', label: 'Método' },
+  { href: '/about', label: 'Sobre el proyecto' },
+];
+
 const Footer = () => {
   return (
     <footer className="site-footer">
       <div className="site-footer-inner">
         <div className="site-footer-brand">
-          <p className="site-footer-kicker">Technical Excellence in Music Theory</p>
+          <p className="site-footer-kicker">Herramientas + Aprender + Práctica</p>
           <h2 className="site-footer-title">GuitarFlow</h2>
           <p className="site-footer-copy">
-            Herramientas visuales para estudiar escalas, acordes y el diapasón sin perder precisión técnica.
+            Una plataforma de estudio para conectar teoría, técnica y práctica sobre la guitarra.
           </p>
         </div>
 
-        <div className="site-footer-links">
-          <Link href="/" className="site-footer-link">
-            Inicio
-          </Link>
-          <Link href="/tuner" className="site-footer-link">
-            Afinador
-          </Link>
-          <Link href="/about" className="site-footer-link">
-            Sobre Nosotros
-          </Link>
+        <div className="site-footer-links" aria-label="Enlaces de GuitarFlow">
+          {footerLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="site-footer-link">
+              {link.label}
+            </Link>
+          ))}
           <a href="mailto:Manterolaenrique@hotmail.com" className="site-footer-link">
             Contacto
           </a>
@@ -36,8 +40,10 @@ const Footer = () => {
         </div>
 
         <div className="site-footer-meta">
-          <p className="site-footer-meta-text">© 2025 GuitarFlow. Diseñado con Next.js, React y Framer Motion.</p>
-          <p className="site-footer-meta-text">Proyecto personal para práctica, estudio y exploración musical.</p>
+          <p className="site-footer-meta-text">© 2026 GuitarFlow. Construido con Next.js, React y TypeScript.</p>
+          <p className="site-footer-meta-text">
+            Proyecto personal para estudiar, practicar y comprender mejor el instrumento.
+          </p>
         </div>
       </div>
     </footer>
