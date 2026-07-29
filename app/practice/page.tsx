@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { Gauge, Guitar, ListChecks, Music4, Timer } from 'lucide-react';
+import { Gauge, Guitar, ListChecks, Music4, Timer, Trophy } from 'lucide-react';
 import { LinkCard } from '@/components/ui/LinkCard';
 import { PlatformHero } from '@/components/ui/PlatformHero';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -12,6 +12,12 @@ export const metadata: Metadata = {
 };
 
 const practiceAreas = [
+  {
+    icon: Trophy,
+    title: 'Desafío musical',
+    description: 'Jugá una partida corta para probar teoría, mástil y armonía con feedback inmediato.',
+    href: '/challenge',
+  },
   {
     icon: Gauge,
     title: 'Técnica',

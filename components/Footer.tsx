@@ -4,6 +4,7 @@ const footerLinks = [
   { href: '/tools', label: 'Herramientas' },
   { href: '/learn', label: 'Aprender' },
   { href: '/practice', label: 'Práctica' },
+  { href: '/challenge', label: 'Desafío' },
   { href: '/method', label: 'Método' },
   { href: '/about', label: 'Sobre el proyecto' },
 ];

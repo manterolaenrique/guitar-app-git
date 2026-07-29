@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Guitar, ListChecks, Target, Timer } from 'lucide-react';
+import { ArrowRight, BookOpen, Guitar, ListChecks, Target, Timer, Trophy } from 'lucide-react';
 import ScaleViewer from '@/components/ScaleViewer';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 
@@ -95,6 +95,13 @@ export default function Home() {
       </section>
 
       <section className="home-next-steps">
+        <Link href="/challenge" className="home-next-step">
+          <Trophy />
+          <div>
+            <strong>Jugar GuitarFlow Challenge</strong>
+            <span>Probá teoría, mástil y armonía en partidas rápidas.</span>
+          </div>
+        </Link>
         <Link href="/practice" className="home-next-step">
           <ListChecks />
           <div>
